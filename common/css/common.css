@@ -146,3 +146,17 @@ ul.icons a:hover {
 .panel-default > .state-title-heading {
     background-color: navy;
 }
+
+#disclaimer {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+}
+    #disclaimer a {
+        color: #fff;
+        text-decoration: none;
+    }
