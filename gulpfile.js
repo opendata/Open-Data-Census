@@ -215,8 +215,7 @@ gulp.task('readme', function() {
   console.log();
   console.log();
   console.log("The Census is a static site. Census data is embedded at build time from");
-  console.log("'Census Data.xlsx' via public/common/js/data.js. Feedback may be sent to");
-  console.log("contact@usopendata.org".red + " or via GitHub issues.")
+  console.log("'Census Data.xlsx' via public/common/js/data.js.")
   console.log();
   console.log("The site is otherwise a fairly bogstandard Bootstrap/jQuery build. All that");
   console.log("should be required to get the development environment up is:");
