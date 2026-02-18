@@ -1,54 +1,14 @@
-var opts = {
-  lines: 13 // The number of lines to draw
-, length: 28 // The length of each line
-, width: 14 // The line thickness
-, radius: 42 // The radius of the inner circle
-, scale: 1 // Scales overall size of the spinner
-, corners: 1 // Corner roundness (0..1)
-, color: '#000' // #rgb or #rrggbb or array of colors
-, opacity: 0.25 // Opacity of the lines
-, rotate: 0 // The rotation offset
-, direction: 1 // 1: clockwise, -1: counterclockwise
-, speed: 1 // Rounds per second
-, trail: 60 // Afterglow percentage
-, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-, zIndex: 2e9 // The z-index (defaults to 2000000000)
-, className: 'spinner' // The CSS class to assign to the spinner
-, top: '50%' // Top position relative to parent
-, left: '50%' // Left position relative to parent
-, shadow: false // Whether to render a shadow
-, hwaccel: false // Whether to use hardware acceleration
-, position: 'absolute' // Element positioning
-}
-var target = document.getElementById('grid')
-var spinner = new Spinner(opts).spin(target);
-
- $(document).ready(function() {
-
-     Tabletop.init({
-         key: "1OhVbryeHBsPjJ3TjjVFlfM552pDKRjiUpTAXQJe9miA",
-         callback: showInfo,
-         parseNumbers: true
-     });
-
-    
+$(document).ready(function() {
+    showInfo();
     $('.table-responsive').doubleScroll();
+});
 
- });
+var rawData = [];
 
-function mapInfo(data, tabletop) {
+function showInfo() {
 
-}
-
- var rawData = [];
-
- function showInfo(data, tabletop) {
-    
-     /* Stop our progress indicator, now that data is loaded. */
-     spinner.stop();
-
-     /* Put together data for the map. */
-     var state_abbreviations ={
+    /* Put together data for the map. */
+    var state_abbreviations = {
         "al": "Alabama",
         "ar": "Arkansas",
         "az": "Arizona",
@@ -101,20 +61,21 @@ function mapInfo(data, tabletop) {
         "wv": "West Virginia",
         "wi": "Wisconsin",
         "wy": "Wyoming"
-     }
-     rawData = tabletop.sheets('Places').all();
-     var place_scores = {};
-     for (var key in rawData){
+    };
+
+    rawData = window.placesData;
+    var place_scores = {};
+    for (var key in rawData) {
         name = rawData[key]['Name'];
-        for (var key2 in state_abbreviations){
-            if (state_abbreviations[key2] == name){
+        for (var key2 in state_abbreviations) {
+            if (state_abbreviations[key2] == name) {
                 abbreviation = key2;
             }
         }
-        place_scores[abbreviation] = rawData[key]['Score']
-     }
+        place_scores[abbreviation] = rawData[key]['Score'];
+    }
 
-     var score_colors = {
+    var score_colors = {
         "20": "#f7fbff",
         "30": "#deebf7",
         "40": "#c6dbef",
@@ -123,106 +84,106 @@ function mapInfo(data, tabletop) {
         "70": "#4292c6",
         "80": "#2171b5",
         "90": "#084594",
-     }
+    };
 
-     var place_colors = {};
-     for (var key in place_scores){
+    var place_colors = {};
+    for (var key in place_scores) {
         score = Math.floor(place_scores[key] / 10) * 10;
         if (score < 20) score = 20;
         place_colors[key] = score_colors[score];
-     }
+    }
 
-     $('#vmap').vectorMap({
-       map: 'usa_en',
-       backgroundColor: null,
-       color: '#eee',
-       showTooltip: true,
-       showLabels: true,
-       selectedColor: null,
-       hoverColor: "#f66",
-       colors: place_colors,
-       onRegionClick: function(event, code, region){
+    $('#vmap').vectorMap({
+        map: 'usa_en',
+        backgroundColor: null,
+        color: '#eee',
+        showTooltip: true,
+        showLabels: true,
+        selectedColor: null,
+        hoverColor: "#f66",
+        colors: place_colors,
+        onRegionClick: function(event, code, region) {
             event.preventDefault();
             window.location.href = "/datasets.html?state=" + region;
-       }
-     });
+        }
+    });
 
-     /* Now create the table of data. */
-     var stateTemplate = Handlebars.compile($("#state-template").html());
+    /* Now create the table of data. */
+    var stateTemplate = Handlebars.compile($("#state-template").html());
 
-     rawData = tabletop.sheets("Census Data").all()
-     var allTypes = _.chain(rawData).map(function(row) {
-             return row["Type of Data"]
-         })
-         .unique()
-         .value();
+    rawData = window.censusData;
+    var allTypes = _.chain(rawData).map(function(row) {
+            return row["Type of Data"];
+        })
+        .unique()
+        .value();
 
-     setupDatatypes(allTypes);
+    setupDatatypes(allTypes);
 
-     /* Reverse the state abbreviations' keys and values. */
-     reversed = {};
-     for(var key in state_abbreviations){
-         reversed[state_abbreviations[key]] = key;
-     }
-     state_abbreviations = reversed;
+    /* Reverse the state abbreviations' keys and values. */
+    reversed = {};
+    for (var key in state_abbreviations) {
+        reversed[state_abbreviations[key]] = key;
+    }
+    state_abbreviations = reversed;
 
-     var rows = _.chain(rawData)
-         .groupBy("State")
-         .map(function(datasets, state) {
-             var row = {
-                 state: state,
-                 state_score: place_scores[state_abbreviations[state]] + "%",
-                 state: datasets[0]["State"],
-                 stateHref: URI().filename("datasets.html").search({
-                     "state": state
-                 }).toString(),
-                 datasets: []
-             }
+    var rows = _.chain(rawData)
+        .groupBy("State")
+        .map(function(datasets, state) {
+            var row = {
+                state: state,
+                state_score: place_scores[state_abbreviations[state]] + "%",
+                state: datasets[0]["State"],
+                stateHref: URI().filename("datasets.html").search({
+                    "state": state
+                }).toString(),
+                datasets: []
+            };
 
-             _.each(allTypes, function(type) {
-                 var foundDataset = _.find(datasets, function(dataset) {
-                     return dataset["Type of Data"] === type;
-                 })
-                 if (foundDataset) {
-                     var gridData = {
-                         grade: foundDataset["Grade"],
-                         score: foundDataset["Score"],
-                         datasetHref: URI().filename("datasets.html").search({
-                             "state": row["state"],
-                             "datatype": foundDataset["Type of Data"]
-                         })
-                     }
+            _.each(allTypes, function(type) {
+                var foundDataset = _.find(datasets, function(dataset) {
+                    return dataset["Type of Data"] === type;
+                });
+                if (foundDataset) {
+                    var gridData = {
+                        grade: foundDataset["Grade"],
+                        score: foundDataset["Score"],
+                        datasetHref: URI().filename("datasets.html").search({
+                            "state": row["state"],
+                            "datatype": foundDataset["Type of Data"]
+                        })
+                    };
 
-                     for(var index in gridData) {
+                    for (var index in gridData) {
                         if (!gridData[index]) {
                             gridData[index] = "DNE";
                         }
-                     }
+                    }
 
-                     row["datasets"].push(gridData).toString();
-                 }
-             });
-             return row;
-         })
-         .sortBy("state")
-         .each(function(row) {
-             var html = stateTemplate(row);
-             $("#states").append(html);
-         })
-     .value();
-     $('[data-toggle="tooltip"]').tooltip()
- }
+                    row["datasets"].push(gridData).toString();
+                }
+            });
+            return row;
+        })
+        .sortBy("state")
+        .each(function(row) {
+            var html = stateTemplate(row);
+            $("#states").append(html);
+        })
+        .value();
+    $('[data-toggle="tooltip"]').tooltip();
+}
 
- function setupDatatypes(allTypes) {
-     var datatypes = _.chain(allTypes).map(function(type) {
-             return {
-                 "datatype": type,
-                 "datatypeHref": URI().filename(type.replace(/ /g, '') + ".html").toString()
-             }
-         })
-         .unique()
-         .value();
-     var datasetTemplate = Handlebars.compile($("#dataset-template").html());
-     var datasetHtml = datasetTemplate(datatypes);
-     $("#datasets").append(datasetHtml);
- }
+function setupDatatypes(allTypes) {
+    var datatypes = _.chain(allTypes).map(function(type) {
+            return {
+                "datatype": type,
+                "datatypeHref": URI().filename(type.replace(/ /g, '') + ".html").toString()
+            };
+        })
+        .unique()
+        .value();
+    var datasetTemplate = Handlebars.compile($("#dataset-template").html());
+    var datasetHtml = datasetTemplate(datatypes);
+    $("#datasets").append(datasetHtml);
+}

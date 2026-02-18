@@ -10,7 +10,6 @@
     "tests"
   ],
   "dependencies": {
-    "tabletop": "~1.4.0",
     "jquery": "~2.1.4",
     "bootstrap": "~3.3.4",
     "handlebars": "~3.0.3",
@@ -18,7 +17,6 @@
     "uri.js": "~1.15.1",
     "components-font-awesome": "~4.3.0",
     "doublescroll": "avianey/jqDoubleScroll",
-    "spin.js": "~2.3.2",
     "jqvmap": "~1.4.0",
     "jqvmap-us": "https://raw.githubusercontent.com/manifestinteractive/jqvmap/master/dist/maps/jquery.vmap.usa.js"
   },

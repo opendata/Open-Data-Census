@@ -214,9 +214,9 @@ gulp.task('readme', function() {
   console.log("______________________________________________".blue);
   console.log();
   console.log();
-  console.log("The Census is built on a Google Spreadsheet integration though tabletop.js.");
-  console.log("Feedback and suggested additions to the current data are more than welcome");
-  console.log("at" + " contact@usopendata.org".red + " and/or our google form" + " bit.ly/1KMFbxZ".red)
+  console.log("The Census is a static site. Census data is embedded at build time from");
+  console.log("'Census Data.xlsx' via public/common/js/data.js. Feedback may be sent to");
+  console.log("contact@usopendata.org".red + " or via GitHub issues.")
   console.log();
   console.log("The site is otherwise a fairly bogstandard Bootstrap/jQuery build. All that");
   console.log("should be required to get the development environment up is:");
