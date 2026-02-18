@@ -11,6 +11,9 @@
     "merge-stream": "^0.1.7",
     "stream-series": "^0.1.1"
   },
+  "overrides": {
+    "graceful-fs": "^4.2.0"
+  },
   "dependencies": {
     "bower-files": "^3.7.0",
     "gulp-concat": "^2.5.2",
