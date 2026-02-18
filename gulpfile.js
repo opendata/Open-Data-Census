@@ -141,6 +141,9 @@ gulp.task('buildProd', ['bower'], function() {
     gulp.src('./public/common/favicon.ico')
       .pipe(gulp.dest('Open-Data-Census/'));
 
+    gulp.src('./public/common/CNAME')
+      .pipe(gulp.dest('Open-Data-Census/'));
+
     return merge(underscore.map(modules, function(module) {
         var target = gulp.src('./public/' + module + '/*.html');
 
