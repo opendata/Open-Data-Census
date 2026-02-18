@@ -161,9 +161,15 @@ gulp.task('buildProd', ['bower'], function() {
             .pipe(gulp.dest('Open-Data-Census/' + module + '/img'));
 
 
-        return merge([target.pipe(inject(series(bowerJs, commonJs, customJs)))
-            .pipe(inject(series(bowerCss, commonCss, customCss)))
-            .pipe(inject(bowerWoff))
+        return merge([target.pipe(inject(series(bowerJs, commonJs, customJs), {
+                ignorePath: '/Open-Data-Census/'
+            }))
+            .pipe(inject(series(bowerCss, commonCss, customCss), {
+                ignorePath: '/Open-Data-Census/'
+            }))
+            .pipe(inject(bowerWoff, {
+                ignorePath: '/Open-Data-Census/'
+            }))
             .pipe(inject(gulp.src(['./public/common/partials/nav.html']), {
                 starttag: '<!-- inject:nav:html -->',
                 transform: function (filePath, file) {
