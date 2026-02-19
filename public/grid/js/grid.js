@@ -196,7 +196,8 @@ function initMap(place_colors, abbr_to_name) {
             })
             .on("click", function(event, d) {
                 var abbr = fipsToAbbr[String(d.id).padStart(2, "0")];
-                if (abbr) window.location.href = "/datasets.html?state=" + abbr;
+                var name = abbr_to_name[abbr];
+                if (name) window.location.href = "/datasets.html?state=" + encodeURIComponent(name);
             })
             .append("title")
             .text(function(d) {
