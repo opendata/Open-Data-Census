@@ -53,6 +53,9 @@ gulp.task('buildDev', ['npm', 'bower', 'clean'], function() {
     var commonJs = gulp.src('./public/common/js/**.js')
         .pipe(gulp.dest('out/common/js'));
 
+    gulp.src('./public/common/vendor/**.*')
+        .pipe(gulp.dest('out/common/vendor'));
+
     gulp.src('./public/common/CNAME')
         .pipe(gulp.dest('out/'));
 
@@ -139,6 +142,9 @@ gulp.task('buildProd', ['bower'], function() {
         .pipe(concat('common.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('Open-Data-Census/common/js'));
+
+    gulp.src('./public/common/vendor/**.*')
+        .pipe(gulp.dest('Open-Data-Census/common/vendor'));
 
     gulp.src('./public/common/favicon.ico')
       .pipe(gulp.dest('Open-Data-Census/'));
