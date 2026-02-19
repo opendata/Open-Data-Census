@@ -16,9 +16,7 @@
     "underscore": "~1.8.3",
     "uri.js": "~1.15.1",
     "components-font-awesome": "~4.3.0",
-    "doublescroll": "avianey/jqDoubleScroll",
-    "jqvmap": "~1.4.0",
-    "jqvmap-us": "https://raw.githubusercontent.com/manifestinteractive/jqvmap/master/dist/maps/jquery.vmap.usa.js"
+    "doublescroll": "avianey/jqDoubleScroll"
   },
   "private": true
 }

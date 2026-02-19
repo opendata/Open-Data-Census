@@ -93,20 +93,7 @@ function showInfo() {
         place_colors[key] = score_colors[score];
     }
 
-    $('#vmap').vectorMap({
-        map: 'usa_en',
-        backgroundColor: null,
-        color: '#eee',
-        showTooltip: true,
-        showLabels: true,
-        selectedColor: null,
-        hoverColor: "#f66",
-        colors: place_colors,
-        onRegionClick: function(event, code, region) {
-            event.preventDefault();
-            window.location.href = "/datasets.html?state=" + region;
-        }
-    });
+    initMap(place_colors, state_abbreviations);
 
     /* Now create the table of data. */
     var stateTemplate = Handlebars.compile($("#state-template").html());
@@ -172,6 +159,51 @@ function showInfo() {
         })
         .value();
     $('[data-toggle="tooltip"]').tooltip();
+}
+
+function initMap(place_colors, abbr_to_name) {
+    var fipsToAbbr = {
+        "01": "al", "02": "ak", "04": "az", "05": "ar", "06": "ca",
+        "08": "co", "09": "ct", "10": "de", "11": "dc", "12": "fl",
+        "13": "ga", "15": "hi", "16": "id", "17": "il", "18": "in",
+        "19": "ia", "20": "ks", "21": "ky", "22": "la", "23": "me",
+        "24": "md", "25": "ma", "26": "mi", "27": "mn", "28": "ms",
+        "29": "mo", "30": "mt", "31": "ne", "32": "nv", "33": "nh",
+        "34": "nj", "35": "nm", "36": "ny", "37": "nc", "38": "nd",
+        "39": "oh", "40": "ok", "41": "or", "42": "pa", "44": "ri",
+        "45": "sc", "46": "sd", "47": "tn", "48": "tx", "49": "ut",
+        "50": "vt", "51": "va", "53": "wa", "54": "wv", "55": "wi",
+        "56": "wy", "72": "pr"
+    };
+
+    var projection = d3.geoAlbersUsa().scale(1280).translate([480, 300]);
+    var path = d3.geoPath().projection(projection);
+
+    var svg = d3.select("#vmap").append("svg")
+        .attr("viewBox", "0 0 960 600")
+        .attr("preserveAspectRatio", "xMidYMid meet");
+
+    d3.json("/grid/data/us-states.json").then(function(us) {
+        svg.append("g")
+            .selectAll("path")
+            .data(topojson.feature(us, us.objects.states).features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("class", "state")
+            .style("fill", function(d) {
+                var abbr = fipsToAbbr[String(d.id).padStart(2, "0")];
+                return place_colors[abbr] || "#eee";
+            })
+            .on("click", function(event, d) {
+                var abbr = fipsToAbbr[String(d.id).padStart(2, "0")];
+                if (abbr) window.location.href = "/datasets.html?state=" + abbr;
+            })
+            .append("title")
+            .text(function(d) {
+                var abbr = fipsToAbbr[String(d.id).padStart(2, "0")] || "";
+                return abbr_to_name[abbr] || abbr.toUpperCase();
+            });
+    });
 }
 
 function setupDatatypes(allTypes) {

@@ -68,6 +68,8 @@ gulp.task('buildDev', ['npm', 'bower', 'clean'], function() {
         var images = gulp.src('./public/' + module + '/img/**.*')
             .pipe(gulp.dest('out/' + module + '/img'));
 
+        var data = gulp.src('./public/' + module + '/data/**.*')
+            .pipe(gulp.dest('out/' + module + '/data'));
 
         return merge([target.pipe(inject(series(bowerJs, commonJs, customJs), {
                 ignorePath: '/out/'
@@ -96,7 +98,7 @@ gulp.task('buildDev', ['npm', 'bower', 'clean'], function() {
               }
             ))
             .pipe(gulp.dest('out/'))
-            .pipe(connect.reload()), images])
+            .pipe(connect.reload()), images, data])
     }));
 });
 
@@ -160,6 +162,8 @@ gulp.task('buildProd', ['bower'], function() {
         var images = gulp.src('./public/' + module + '/img/**.*')
             .pipe(gulp.dest('Open-Data-Census/' + module + '/img'));
 
+        var data = gulp.src('./public/' + module + '/data/**.*')
+            .pipe(gulp.dest('Open-Data-Census/' + module + '/data'));
 
         return merge([target.pipe(inject(series(bowerJs, commonJs, customJs), {
                 ignorePath: '/Open-Data-Census/'
@@ -187,7 +191,7 @@ gulp.task('buildProd', ['bower'], function() {
               }
             ))
             .pipe(gulp.dest('Open-Data-Census/'))
-            .pipe(connect.reload()), images])
+            .pipe(connect.reload()), images, data])
     }));
 
 });
