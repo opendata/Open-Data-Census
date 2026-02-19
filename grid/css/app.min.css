@@ -49,97 +49,23 @@ td.grade-F {
 
 /* The map on the home page */
 #vmap {
-    min-width: 400px;
-    min-height: 250px;
-    max-width: 800px;
-    max-height: 500px;
-    cursor: pointer;
+    width: 100%;
+    max-width: 960px;
     margin: 0 auto;
 }
-/* Setup basic CSS for Label */
-.jqvmap_pin {
-    font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
-    cursor: default;
+
+#vmap svg {
+    width: 100%;
+    height: auto;
+    display: block;
 }
-/* Hide Whichever Labels you want */
-#jqvmap1_ri_pin, #jqvmap1_dc_pin, #jqvmap1_de_pin, #jqvmap1_md_pin {
-display: none;
+
+.state {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    cursor: pointer;
 }
-/* Reposition Labels that are not quite right ( labels are centered in shape, and sometimes need tweaking ) */
-#jqvmap1_ak_pin {
-margin-top: -2%;
-}
-#jqvmap1_ca_pin {
-margin-left: -2%;
-}
-#jqvmap1_ct_pin {
-margin-top: -0.25%;
-margin-left: -0.25%;
-}
-#jqvmap1_fl_pin {
-margin-left: 5%;
-}
-#jqvmap1_id_pin {
-margin-top: 3%;
-margin-left: -1%;
-}
-#jqvmap1_ky_pin {
-margin-left: 2%;
-}
-#jqvmap1_la_pin {
-margin-left: -2%;
-}
-#jqvmap1_mi_pin {
-margin-top: 4%;
-margin-left: 3%;
-}
-#jqvmap1_ma_pin {
-margin-top: -0.25%;
-}
-#jqvmap1_mn_pin {
-margin-top: 2%;
-margin-left: -2%;
-}
-#jqvmap1_nh_pin {
-margin-top: 1%;
-margin-left: -0.25%;
-}
-#jqvmap1_nj_pin {
-margin-top: 1%;
-}
-#jqvmap1_ok_pin {
-margin-left: 2%;
-}
-#jqvmap1_va_pin {
-margin-left: 2%;
-}
-#jqvmap1_wv_pin {
-margin-left: -1%;
-margin-top: 1%;
-}
-/* Add responsibe support to resize labels for difference screen sizes */
-@media only screen and (min-width: 320px) {
-.jqvmap_pin {
-  font-size: 6px;
-}
-}
-@media only screen and (min-width: 480px) {
-.jqvmap_pin {
-  font-size: 8px;
-}
-}
-@media only screen and (min-width: 640px) {
-.jqvmap_pin {
-  font-size: 10px;
-}
-}
-@media only screen and (min-width: 800px) {
-.jqvmap_pin {
-  font-size: 12px;
-}
-}
-@media only screen and (min-width: 1024px) {
-.jqvmap_pin {
-  font-size: 14px;
-}
+
+.state:hover {
+    fill: #f66 !important;
 }
